@@ -16,4 +16,8 @@ defmodule Egdal.GDAL.DataType do
   def get_data_type_size(_name) do
     "NIF not loaded"
   end
+
+  def is_complex?(_name) do
+    "NIF not loaded"
+  end
 end

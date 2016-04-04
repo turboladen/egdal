@@ -23,7 +23,7 @@ unload(ErlNifEnv* env, void* priv_data)
 
 /************************************************************************
  *
- *  GDALGetDataTypeByName()
+ *  GDALDataType GDALGetDataTypeByName(const char *)
  *
  ***********************************************************************/
 static ERL_NIF_TERM
@@ -48,7 +48,7 @@ get_data_type_by_name(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
 
 /************************************************************************
  *
- *  GDALGetDataTypeName()
+ *  const char * GDALGetDataTypeName(GDALDataType)
  *
  * TODO: This should return an atom, not a string
  ***********************************************************************/
@@ -68,7 +68,7 @@ get_data_type_name(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) {
 
 /************************************************************************
  *
- *  GDALGetDataTypeSize()
+ *  int GDALGetDataTypeSize(GDALDataType)
  *
  ***********************************************************************/
 static ERL_NIF_TERM
@@ -98,11 +98,49 @@ get_data_type_size(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) {
   return enif_make_tuple2(env, enif_make_atom(env, "ok"), eterm);
 }
 
+/************************************************************************
+ *
+ *  int GDALDataTypeIsComplex(GDALDataType)
+ *
+ ***********************************************************************/
+static ERL_NIF_TERM
+data_type_is_complex(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) {
+  int is_complex;
+  ERL_NIF_TERM eterm;
+
+  unsigned len;
+  if (argc > 0 && !enif_get_atom_length(env, argv[0], &len, ERL_NIF_LATIN1)) {
+    return enif_make_badarg(env);
+  }
+  char *data_type_name = enif_alloc(sizeof(char)*(len+1));
+
+  if(!enif_get_atom(env, argv[0], data_type_name, len+1, ERL_NIF_LATIN1)) {
+    return enif_make_badarg(env);
+  }
+
+  GDALDataType data_type = GDALGetDataTypeByName(data_type_name);
+
+  if(strncmp(data_type_name, "Unknown", 7) && data_type == 0) {
+    enif_free(data_type_name);
+    // Raise an exception here?
+    return enif_make_tuple2(env, enif_make_atom(env, "error"), enif_make_int(env, data_type));
+  }
+
+  enif_free(data_type_name);
+  is_complex = GDALDataTypeIsComplex(data_type);
+  const char *bool_name = is_complex ? "true" : "false";
+
+  eterm = enif_make_atom(env, bool_name);
+
+  return enif_make_tuple2(env, enif_make_atom(env, "ok"), eterm);
+}
+
 static ErlNifFunc nif_funcs[] =
 {
     {"get_data_type_by_name", 1, get_data_type_by_name},
     {"get_data_type_name", 1, get_data_type_name},
-    {"get_data_type_size", 1, get_data_type_size}
+    {"get_data_type_size", 1, get_data_type_size},
+    {"is_complex?", 1, data_type_is_complex}
 };
 
 ERL_NIF_INIT(Elixir.Egdal.GDAL.DataType, nif_funcs, &load, NULL, NULL, unload);
