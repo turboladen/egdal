@@ -5,19 +5,19 @@ defmodule Egdal.GDAL.DataType do
     :ok = :erlang.load_nif('./egdal_gdal_data_type', 0)
   end
 
-  def get_data_type_by_name(_name) do
+  def by_name(_name) do
     "NIF not loaded"
   end
 
-  def get_data_type_name(_index) do
+  def name(_index) do
     "NIF not loaded"
   end
 
-  def get_data_type_size(_name) do
+  def size(_name) do
     "NIF not loaded"
   end
 
-  def is_complex?(_name) do
+  def complex?(_name) do
     "NIF not loaded"
   end
 end

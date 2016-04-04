@@ -137,10 +137,10 @@ data_type_is_complex(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) {
 
 static ErlNifFunc nif_funcs[] =
 {
-    {"get_data_type_by_name", 1, get_data_type_by_name},
-    {"get_data_type_name", 1, get_data_type_name},
-    {"get_data_type_size", 1, get_data_type_size},
-    {"is_complex?", 1, data_type_is_complex}
+    {"by_name", 1, get_data_type_by_name},
+    {"name", 1, get_data_type_name},
+    {"size", 1, get_data_type_size},
+    {"complex?", 1, data_type_is_complex}
 };
 
 ERL_NIF_INIT(Elixir.Egdal.GDAL.DataType, nif_funcs, &load, NULL, NULL, unload);
