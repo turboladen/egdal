@@ -3,3 +3,6 @@
 /deps
 erl_crash.dump
 *.ez
+.mix_tasks
+mix.lock
+*.so
