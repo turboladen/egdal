@@ -2,11 +2,7 @@ defmodule Egdal.GDAL.DataType do
   @on_load :load_nifs
 
   def load_nifs do
-    :ok = :erlang.load_nif('./egdal', 0)
-  end
-
-  def get_version_info() do
-    "NIF not loaded"
+    :ok = :erlang.load_nif('./egdal_gdal_data_type', 0)
   end
 
   def get_data_type_by_name(_name) do

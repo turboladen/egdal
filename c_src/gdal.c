@@ -21,37 +21,11 @@ unload(ErlNifEnv* env, void* priv_data)
       // ?
 }
 
-/* static int */
-/* upgrade(ErlNifEnv *env, void **priv,, void **old_priv, ERL_NIF_TERM load_info) */
-/* { */
-/*   GDALAllRegister(); */
-/*   return 0; */
-/* } */
-
 /************************************************************************
  *
- *  GDALVersionInfo
+ *  GDALGetDataTypeByName()
  *
  ***********************************************************************/
-
-static ERL_NIF_TERM
-get_version_info(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
-{
-    /* char *psz_request; */
-    const char *psz_request = "RELEASE_NAME";
-    ERL_NIF_TERM eterm;
-
-    if (argc != 0) {
-      return enif_make_badarg(env);
-    }
-
-    const char *version_info = GDALVersionInfo(psz_request);
-    eterm = enif_make_string(env, version_info, ERL_NIF_LATIN1);
-    /* free(psz_request); */
-
-    return enif_make_tuple2(env, enif_make_atom(env, "ok"), eterm);
-}
-
 static ERL_NIF_TERM
 get_data_type_by_name(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
 {
@@ -72,6 +46,12 @@ get_data_type_by_name(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
   return enif_make_tuple2(env, enif_make_atom(env, "ok"), e_data_type);
 }
 
+/************************************************************************
+ *
+ *  GDALGetDataTypeName()
+ *
+ * TODO: This should return an atom, not a string
+ ***********************************************************************/
 static ERL_NIF_TERM
 get_data_type_name(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) {
   int data_type = 0;
@@ -86,6 +66,11 @@ get_data_type_name(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) {
   return enif_make_tuple2(env, enif_make_atom(env, "ok"), eterm);
 }
 
+/************************************************************************
+ *
+ *  GDALGetDataTypeSize()
+ *
+ ***********************************************************************/
 static ERL_NIF_TERM
 get_data_type_size(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) {
   int data_type_size = 0;
@@ -115,11 +100,9 @@ get_data_type_size(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) {
 
 static ErlNifFunc nif_funcs[] =
 {
-    {"get_version_info", 0, get_version_info},
     {"get_data_type_by_name", 1, get_data_type_by_name},
     {"get_data_type_name", 1, get_data_type_name},
     {"get_data_type_size", 1, get_data_type_size}
 };
 
-/* ERL_NIF_INIT(Elixir.Egdal, nif_funcs, &load, NULL, &upgrade, unload); */
 ERL_NIF_INIT(Elixir.Egdal.GDAL.DataType, nif_funcs, &load, NULL, NULL, unload);
