@@ -122,4 +122,4 @@ static ErlNifFunc nif_funcs[] =
 };
 
 /* ERL_NIF_INIT(Elixir.Egdal, nif_funcs, &load, NULL, &upgrade, unload); */
-ERL_NIF_INIT(Elixir.Egdal, nif_funcs, &load, NULL, NULL, unload);
+ERL_NIF_INIT(Elixir.Egdal.GDAL.DataType, nif_funcs, &load, NULL, NULL, unload);
