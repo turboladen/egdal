@@ -110,9 +110,12 @@ get_data_type_size(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) {
   eterm = enif_make_int(env, data_type_size);
 
   if(strncmp(data_type_name, "Unknown", 7) && data_type_size == 0) {
+    enif_free(data_type_name);
     // Raise an exception here?
     return enif_make_tuple2(env, enif_make_atom(env, "error"), eterm);
   }
+
+  enif_free(data_type_name);
 
   return enif_make_tuple2(env, enif_make_atom(env, "ok"), eterm);
 }
