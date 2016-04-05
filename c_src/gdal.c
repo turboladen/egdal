@@ -21,8 +21,24 @@ unload(ErlNifEnv* env, void* priv_data)
       // ?
 }
 
-/************************************************************************
+/***************************************************************************//**
  *
+ *  Helper function for making sure we got a good GDALDataType.
+ *
+ *  @returns 0 if we got a bad data type name (as an Atom); otherwise returns
+ *  the length of the Atom.
+ *
+ ******************************************************************************/
+unsigned is_valid_data_type_name(ErlNifEnv* env, int argc, ERL_NIF_TERM data_type_name) {
+  unsigned length;
+
+  if (argc > 0 && !enif_get_atom_length(env, data_type_name, &length, ERL_NIF_LATIN1)) {
+    return 0;
+  }
+
+  return length;
+}
+
 /***************************************************************************//**
  *
  * Wrapper for:
@@ -32,10 +48,9 @@ unload(ErlNifEnv* env, void* priv_data)
 static ERL_NIF_TERM
 get_data_type_by_name(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
 {
-  unsigned len;
-  if (argc > 0 && !enif_get_atom_length(env, argv[0], &len, ERL_NIF_LATIN1)) {
-    return enif_make_badarg(env);
-  }
+  unsigned len = is_valid_data_type_name(env, argc, argv[0]);
+  if (!len) { return enif_make_badarg(env); }
+
   char *psz_name = enif_alloc(sizeof(char)*(len+1));
 
   if(!enif_get_atom(env, argv[0], psz_name, len+1, ERL_NIF_LATIN1)) {
@@ -81,10 +96,9 @@ get_data_type_size(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) {
   int data_type_size = 0;
   ERL_NIF_TERM eterm;
 
-  unsigned len;
-  if (argc > 0 && !enif_get_atom_length(env, argv[0], &len, ERL_NIF_LATIN1)) {
-    return enif_make_badarg(env);
-  }
+  unsigned len = is_valid_data_type_name(env, argc, argv[0]);
+  if (!len) { return enif_make_badarg(env); }
+
   char *data_type_name = enif_alloc(sizeof(char)*(len+1));
 
   if(!enif_get_atom(env, argv[0], data_type_name, len+1, ERL_NIF_LATIN1)) {
@@ -120,10 +134,9 @@ data_type_is_complex(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) {
   int is_complex;
   ERL_NIF_TERM eterm;
 
-  unsigned len;
-  if (argc > 0 && !enif_get_atom_length(env, argv[0], &len, ERL_NIF_LATIN1)) {
-    return enif_make_badarg(env);
-  }
+  unsigned len = is_valid_data_type_name(env, argc, argv[0]);
+  if (!len) { return enif_make_badarg(env); }
+
   char *data_type_name = enif_alloc(sizeof(char)*(len+1));
 
   if(!enif_get_atom(env, argv[0], data_type_name, len+1, ERL_NIF_LATIN1)) {
