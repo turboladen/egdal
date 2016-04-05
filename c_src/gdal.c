@@ -23,9 +23,12 @@ unload(ErlNifEnv* env, void* priv_data)
 
 /************************************************************************
  *
+/***************************************************************************//**
+ *
+ * Wrapper for:
  *  GDALDataType GDALGetDataTypeByName(const char *)
  *
- ***********************************************************************/
+ ******************************************************************************/
 static ERL_NIF_TERM
 get_data_type_by_name(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
 {
@@ -46,12 +49,13 @@ get_data_type_by_name(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
   return enif_make_tuple2(env, enif_make_atom(env, "ok"), e_data_type);
 }
 
-/************************************************************************
+/***************************************************************************//**
  *
- *  const char * GDALGetDataTypeName(GDALDataType)
+ *  Wrapper for:
+ *    const char * GDALGetDataTypeName(GDALDataType)
  *
- * TODO: This should return an atom, not a string
- ***********************************************************************/
+ * @todo This should return an atom, not a string
+ ******************************************************************************/
 static ERL_NIF_TERM
 get_data_type_name(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) {
   int data_type = 0;
@@ -66,11 +70,12 @@ get_data_type_name(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) {
   return enif_make_tuple2(env, enif_make_atom(env, "ok"), eterm);
 }
 
-/************************************************************************
+/***************************************************************************//**
  *
- *  int GDALGetDataTypeSize(GDALDataType)
+ *  Wrapper for:
+ *    int GDALGetDataTypeSize(GDALDataType)
  *
- ***********************************************************************/
+ ******************************************************************************/
 static ERL_NIF_TERM
 get_data_type_size(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) {
   int data_type_size = 0;
@@ -98,11 +103,18 @@ get_data_type_size(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) {
   return enif_make_tuple2(env, enif_make_atom(env, "ok"), eterm);
 }
 
-/************************************************************************
+/***************************************************************************//**
  *
+ * Wrapper for:
  *  int GDALDataTypeIsComplex(GDALDataType)
  *
- ***********************************************************************/
+ * @param env Erlang environment.
+ * @param argc Arg count.
+ * @param argv The args.
+ * @returns An Erlang tuple that contains: {"ok", [true or false]} or
+ *  {"error", [relavant value].
+ *
+ ******************************************************************************/
 static ERL_NIF_TERM
 data_type_is_complex(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) {
   int is_complex;
@@ -135,6 +147,11 @@ data_type_is_complex(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) {
   return enif_make_tuple2(env, enif_make_atom(env, "ok"), eterm);
 }
 
+/***************************************************************************//**
+ *
+ *  Function exports
+ *
+ ******************************************************************************/
 static ErlNifFunc nif_funcs[] =
 {
     {"by_name", 1, get_data_type_by_name},
