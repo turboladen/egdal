@@ -57,5 +57,17 @@ defmodule Egdal.GDAL.DataType do
     {:error, "NIF not loaded"}
   end
 
+  @doc """
+  Gets the smallest DataType that can contain both `_type1` and `_type2`.
+
+  * Parameters
+    * _type1: Atom that represents the first type.
+    * _type2: Atom that represents the second type.
+  * Returns a tuple
+    * *Atom* `:ok` or `:error`
+    * *Atom* equal to the GDALDataType name.
+  """
+  def union(_type1, _type2) do
+    {:error, "NIF not loaded"}
   end
 end
