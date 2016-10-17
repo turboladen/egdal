@@ -6,3 +6,5 @@ erl_crash.dump
 .mix_tasks
 mix.lock
 *.so
+rust/target/
+rust/Cargo.lock

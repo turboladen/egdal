@@ -4,7 +4,7 @@ defmodule Egdal.Mixfile do
   def project do
     [app: :egdal,
      version: "0.0.1",
-     elixir: "~> 1.2",
+     elixir: "~> 1.3",
      compilers: [:make, :elixir, :app],
      aliases: aliases,
      build_embedded: Mix.env == :prod,
