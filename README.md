@@ -18,3 +18,8 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
           [applications: [:egdal]]
         end
 
+## Developers
+
+### C Code
+
+* Follow [Mozilla's Coding Style](https://developer.mozilla.org/en-US/docs/Mozilla/Developer_guide/Coding_Style) Guide.
