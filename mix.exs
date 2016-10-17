@@ -4,8 +4,10 @@ defmodule Egdal.Mixfile do
   def project do
     [app: :egdal,
      version: "0.0.1",
-     elixir: "~> 1.2",
+     elixir: "~> 1.3",
+     # compilers: [:rustler] ++ Mix.compilers,
      compilers: [:make, :elixir, :app],
+     rustler_crates: ["/native/gdal"],
      aliases: aliases,
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
@@ -33,7 +35,7 @@ defmodule Egdal.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    []
+    [{:rustler, "~> 0.1"}]
   end
 end
 
