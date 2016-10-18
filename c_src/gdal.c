@@ -29,10 +29,25 @@ unload(ErlNifEnv* env, void* priv_data)
  *  the length of the Atom.
  *
  ******************************************************************************/
-unsigned is_valid_data_type_name(ErlNifEnv* env, int argc, ERL_NIF_TERM data_type_name) {
+unsigned is_valid_data_type_name(ErlNifEnv* env, int argc, ERL_NIF_TERM e_data_type_name) {
   unsigned length;
 
-  if (argc > 0 && !enif_get_atom_length(env, data_type_name, &length, ERL_NIF_LATIN1)) {
+  if (argc > 0 && !enif_get_atom_length(env, e_data_type_name, &length, ERL_NIF_LATIN1)) {
+    return 0;
+  }
+
+  char *c_data_type_name = enif_alloc(sizeof(char)*(length+1));
+
+  if(!enif_get_atom(env, e_data_type_name, c_data_type_name, length+1, ERL_NIF_LATIN1)) {
+    return 0;
+  }
+
+  GDALDataType data_type = GDALGetDataTypeByName(c_data_type_name);
+  int data_type_size = GDALGetDataTypeSize(data_type);
+
+  if(strncmp(c_data_type_name, "Unknown", 7) && data_type_size == 0) {
+    enif_free(c_data_type_name);
+    // Raise an exception here?
     return 0;
   }
 
@@ -95,11 +110,18 @@ get_data_type_name(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) {
   int data_type = 0;
   ERL_NIF_TERM eterm;
 
-  enif_get_int(env, argv[0], &data_type);
+  if(!enif_get_int(env, argv[0], &data_type)) {
+    /* return enif_make_badarg(env); */
+  }
 
   const char *data_type_name = GDALGetDataTypeName(data_type);
+  if (strcmp(data_type_name, "")) {
+    /* return enif_make_badarg(env); */
+  }
 
-  eterm = enif_make_string(env, data_type_name, ERL_NIF_LATIN1);
+  printf("data type name is %s", data_type_name);
+
+  eterm = enif_make_atom(env, data_type_name);
 
   return enif_make_tuple2(env, enif_make_atom(env, "ok"), eterm);
 }
@@ -223,11 +245,11 @@ data_type_union(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) {
  ******************************************************************************/
 static ErlNifFunc nif_funcs[] =
 {
-    {"by_name", 1, get_data_type_by_name},
-    {"name", 1, get_data_type_name},
-    {"size", 1, get_data_type_size},
-    {"complex?", 1, data_type_is_complex},
-    {"union", 2, data_type_union}
+    {"by_name",   1, get_data_type_by_name},
+    {"name",      1, get_data_type_name},
+    {"size",      1, get_data_type_size},
+    {"complex?",  1, data_type_is_complex},
+    {"union",     2, data_type_union}
 };
 
 ERL_NIF_INIT(Elixir.Egdal.GDAL.DataType, nif_funcs, &load, NULL, NULL, unload);
