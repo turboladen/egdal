@@ -1,11 +1,14 @@
 defmodule Egdal.GDAL do
+  require Rustler
+
   @on_load :load_nifs
 
   def load_nifs do
-    :ok = :erlang.load_nif('./egdal_gdal_info', 0)
+    # Rustler.load_nif("gdal")
+    :ok = :erlang.load_nif('./native/gdal/target/debug/libgdal', 0)
   end
 
-  def get_version_info() do
-    "NIF not loaded"
-  end
+  def get_version_info_dawg(), do: err
+
+  defp err, do: throw :nif_not_loaded
 end

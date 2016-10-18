@@ -12,8 +12,8 @@ use rustler::binary::OwnedNifBinary;
 use std::io::Write;
 
 rustler_export_nifs!(
-    "Elixir.Egdal.GDALRust",
-    [("get_version_info_dawg", 0, get_version_info)],
+    "Elixir.Egdal.GDAL",
+    [("get_version_info", 0, get_version_info)],
     Some(on_load)
 );
 
