@@ -1,8 +1,3 @@
-#![feature(link_args)]
-
-#[link_args = "-flat_namespace -undefined suppress"]
-extern {}
-
 #[macro_use]
 extern crate rustler;
 extern crate gdal;
