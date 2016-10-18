@@ -30,15 +30,17 @@ fn get_version_info<'a>(env: &'a NifEnv, _args: &Vec<NifTerm>) -> NifResult<NifT
     let key = "RELEASE_NAME";
     let c_key = CString::new(key.as_bytes()).unwrap();
 
-    let c_str = unsafe {
-        let version_ptr = GDALVersionInfo(c_key.as_ptr());
-        CStr::from_ptr(version_ptr)
-    };
-
-    let meow = str::from_utf8(c_str.to_bytes()).unwrap();
-
-    let mut binary = OwnedNifBinary::alloc(meow.len()).unwrap();
-    let _result = binary.as_mut_slice().write_all(meow.as_bytes());
+    let version_ptr = unsafe { GDALVersionInfo(c_key.as_ptr()) };
+    let binary = _c_string_to_binary(version_ptr);
 
     Ok(binary.release(env).get_term(env))
+}
+
+fn _c_string_to_binary(raw_ptr: *const c_char) -> OwnedNifBinary {
+    let c_str = unsafe { CStr::from_ptr(raw_ptr) };
+    let rust_str = str::from_utf8(c_str.to_bytes()).unwrap();
+    let mut binary = OwnedNifBinary::alloc(rust_str.len()).unwrap();
+    let _result = binary.as_mut_slice().write_all(rust_str.as_bytes());
+
+    binary
 }
