@@ -32,7 +32,7 @@ extern "C" fn unload(
 ) {}
 
 nif_init!(
-    b"Elixir.Egdal.GDALRust\0",
+    b"Elixir.Egdal.GDAL\0",
     Some(load), Some(reload), Some(upgrade), Some(unload),
     nif!(b"get_version_info\0", 0, get_version_info)
 );
