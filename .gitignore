@@ -8,3 +8,7 @@ mix.lock
 *.so
 rust/target/
 rust/Cargo.lock
+
+native/gdal/Cargo.lock
+
+tags

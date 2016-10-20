@@ -34,7 +34,7 @@ extern "C" fn unload(
 nif_init!(
     b"Elixir.Egdal.GDALRust\0",
     Some(load), Some(reload), Some(upgrade), Some(unload),
-    nif!(b"get_version_info_meow\0", 0, get_version_info)
+    nif!(b"get_version_info\0", 0, get_version_info)
 );
 
 #[link(name="gdal")]
@@ -45,7 +45,7 @@ extern {
 extern "C" fn get_version_info (
     env:  *mut ErlNifEnv,
     argc: c_int,
-    args: *const ERL_NIF_TERM
+    _args: *const ERL_NIF_TERM
 ) -> ERL_NIF_TERM {
     if argc != 0 { return unsafe { enif_make_badarg(env) } }
 

@@ -1,10 +1,10 @@
 [package]
-name = "egdal"
+name = "gdal"
 version = "0.1.0"
 authors = ["Steve Loveless <steve.loveless@gmail.com>"]
 
 [lib]
-crate-type = ["rlib", "dylib", "bin"]
+crate-type = ["cdylib"]
 
 [dependencies]
 erlang_nif-sys = "*"
