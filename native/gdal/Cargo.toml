@@ -7,7 +7,6 @@ authors = ["Steve Loveless <steve.loveless@gmail.com>"]
 crate-type = ["cdylib"]
 
 [dependencies]
-gdal = "*"
 rustler = { git = "https://github.com/hansihe/Rustler" }
 rustler_codegen = { git = "https://github.com/hansihe/Rustler" }
 aster = { version = "0.30.0", features = ["with-syntex"] }
