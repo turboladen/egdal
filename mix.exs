@@ -5,9 +5,13 @@ defmodule Egdal.Mixfile do
     [app: :egdal,
      version: "0.0.1",
      elixir: "~> 1.3",
-     # compilers: [:rustler] ++ Mix.compilers,
-     compilers: Mix.compilers,
-     rustler_crates: ["/native/gdal"],
+     compilers: [:rustler] ++ Mix.compilers,
+     rustler_crates: [
+       gdal: [
+         path: "/native/gdal",
+         mode: (if Mix.env == :prod, do: :release, else: :debug),
+       ]
+     ],
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps]
